@@ -4,6 +4,8 @@
 // the Free Software Foundation, either version 3 of the License, or (at your
 // option) any later version. See LICENSE.TXT for details.
 
+#pragma once
+
 #include <vector>
 #include <string>
 #include <set>
@@ -16,7 +18,7 @@ class Inliner {
 public:
     explicit Inliner(const std::vector<std::string>& clangCommandLineOptions);
 
-    // The file read in binary mode, so the returned string is also
+    // The file is read in binary mode, so the returned string is also
     // 'in binary mode' (contains \r\n on Windows)
     std::string doInline(const std::string& cppFile);
 

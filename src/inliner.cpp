@@ -4,56 +4,51 @@
 // the Free Software Foundation, either version 3 of the License, or (at your
 // option) any later version. See LICENSE.TXT for details.
 
-#include <cstdio>
+#include "inliner.h"
+#include "clang_version.h"
+#include "util.h"
+
+#include <clang/AST/ASTConsumer.h>
+#include <clang/AST/ASTContext.h>
+#include <clang/AST/RecursiveASTVisitor.h>
+#include <clang/Basic/SourceManager.h>
+#include <clang/Frontend/CompilerInstance.h>
+#include <clang/Frontend/FrontendAction.h>
+#include <clang/Lex/Preprocessor.h>
+#include <clang/Rewrite/Core/Rewriter.h>
+#include <clang/Tooling/CompilationDatabase.h>
+#include <clang/Tooling/Tooling.h>
+
 #include <iostream>
+#include <memory>
+#include <set>
 #include <stdexcept>
 #include <string>
 #include <sstream>
 
-#include "clang/AST/ASTConsumer.h"
-#include "clang/AST/ASTContext.h"
-#include "clang/AST/RecursiveASTVisitor.h"
-#include "clang/Basic/Diagnostic.h"
-#include "clang/Basic/FileManager.h"
-#include "clang/Basic/SourceManager.h"
-#include "clang/Basic/TargetOptions.h"
-#include "clang/Basic/TargetInfo.h"
-#include "clang/Frontend/ASTConsumers.h"
-#include "clang/Frontend/CompilerInstance.h"
-#include "clang/Frontend/FrontendActions.h"
-#include "clang/Frontend/Utils.h"
-#include "clang/Lex/HeaderSearch.h"
-#include "clang/Lex/Preprocessor.h"
-#include "clang/Parse/ParseAST.h"
-#include "clang/Rewrite/Core/Rewriter.h"
-#include "clang/Tooling/CompilationDatabase.h"
-#include "clang/Tooling/Tooling.h"
 
-#include "llvm/Support/Host.h"
-#include "llvm/Support/raw_ostream.h"
-
-#include "util.h"
-#include "inliner.h"
 
 using namespace clang;
-using namespace std;
+using std::set;
+using std::string;
+using std::vector;
 
 namespace caide {
 namespace internal {
 
 struct IncludeReplacement {
     SourceRange includeDirectiveRange;
-    std::string fileName;
-    std::string replaceWith;
+    string fileName;
+    string replaceWith;
 };
 
 class TrackMacro: public PPCallbacks {
 public:
-    TrackMacro(SourceManager& _srcManager, std::set<std::string>& _includedHeaders,
-               std::vector<IncludeReplacement>& _replacements)
-        : srcManager(_srcManager)
-        , includedHeaders(_includedHeaders)
-        , replacementStack(_replacements)
+    TrackMacro(SourceManager& srcManager_, set<string>& includedHeaders_,
+               vector<IncludeReplacement>& replacements_)
+        : srcManager(srcManager_)
+        , includedHeaders(includedHeaders_)
+        , replacementStack(replacements_)
     {
         // Setup a placeholder where the result for the whole CPP file will be stored
         replacementStack.resize(1);
@@ -68,7 +63,11 @@ public:
                                     const FileEntry *File,
                                     StringRef /*SearchPath*/,
                                     StringRef /*RelativePath*/,
-                                    const Module* /*Imported*/)
+                                    const Module* /*Imported*/
+#if CAIDE_CLANG_VERSION_AT_LEAST(7, 0)
+                                    , SrcMgr::CharacteristicKind /*FileType*/
+#endif
+                                    ) override
     {
         if (FileName.empty())
             return;
@@ -86,7 +85,7 @@ public:
         const char* e = srcManager.getCharacterData(end);
 
         if (!File) {
-            llvm::errs() << "Compilation error: " << FileName.data() << " not found\n";
+            //std::cerr << "Compilation error: " << FileName.str() << " not found\n";
             return;
         }
 
@@ -102,7 +101,7 @@ public:
 
     virtual void FileChanged(SourceLocation Loc, FileChangeReason Reason,
                              SrcMgr::CharacteristicKind /*FileType*/,
-                             FileID PrevFID/* = FileID()*/)
+                             FileID PrevFID/* = FileID()*/) override
     {
         const FileEntry* curEntry = srcManager.getFileEntryForID(PrevFID);
         if (Reason == PPCallbacks::ExitFile && curEntry) {
@@ -110,7 +109,7 @@ public:
             if (!isUserFile(Loc))
                 return;
             // Rewind replacement stack and compute result of including current file.
-            std::string currentFile = getCanonicalPath(curEntry);
+            string currentFile = getCanonicalPath(curEntry);
 
             // - Search the stack for the topmost replacement belonging to another file.
             //   That's where we were included from.
@@ -121,7 +120,6 @@ public:
             // - Mark this header as visited for future CPP files.
             if (!markAsIncluded(currentFile)) {
                 // - If current header should be skipped, set empty replacement
-                //llvm::errs() << currentFile << " was seen\n";
                 replacementStack[includedFrom].replaceWith = "";
             } else if (isSystemHeader(PrevFID)) {
                 // - This is a new system header. Leave include directive as is,
@@ -136,14 +134,13 @@ public:
         }
     }
 
-    virtual void EndOfMainFile() {
+    virtual void EndOfMainFile() override {
         replacementStack[0].replaceWith = calcReplacements(0, srcManager.getMainFileID());
         replacementStack.resize(1);
     }
 
-    // Documentation seems to be wrong: the first parameter is included file rather than parent
-    virtual void FileSkipped(const FileEntry &IncludedFile, const Token &FilenameTok,
-                             SrcMgr::CharacteristicKind /*FileType*/)
+    virtual void FileSkipped(const FileEntry& SkippedFile, const Token &FilenameTok,
+                             SrcMgr::CharacteristicKind /*FileType*/) override
     {
         // Don't track system headers including each other
         if (!srcManager.isInSystemHeader(FilenameTok.getLocation())) {
@@ -152,43 +149,42 @@ public:
             // It's important to do a manual check here because in other versions of STL
             // the header may not have been included. In other words, we need to explicitly
             // include every file that we use.
-            if (!markAsIncluded(IncludedFile))
+            if (!markAsIncluded(SkippedFile))
                 replacementStack.back().replaceWith = "";
         }
     }
 
-    std::string getResult() const {
+    string getResult() const {
         if (replacementStack.size() != 1)
             return "C++ inliner error";
         else
             return replacementStack[0].replaceWith;
     }
 
-    virtual ~TrackMacro() {
-    }
+    virtual ~TrackMacro() override = default;
 
 private:
     SourceManager& srcManager;
 
     /*
-     * Headers that we already included. Since we want to process
-     * multiple CPP files, we need to track this information explicitly.
+     * Headers that have been included explicitly by user code (i.e. from a cpp file or from
+     * a non-system header).
      */
-    std::set<std::string>& includedHeaders;
+    set<string>& includedHeaders;
 
     /*
      * A 'stack' of replacements, reflecting current include stack.
      * Replacements in the same file are ordered by their location.
      * Replacement string may be empty which means that we skip this include file.
      */
-    std::vector<IncludeReplacement>& replacementStack;
+    vector<IncludeReplacement>& replacementStack;
 
 private:
 
     /*
      * Unwinds inclusion stack and calculates the result of inclusion of current file
      */
-    std::string calcReplacements(int includedFrom, FileID currentFID) const {
+    string calcReplacements(int includedFrom, FileID currentFID) const {
         std::ostringstream result;
         // We go over each #include directive in current file and replace it
         // with the result of inclusion.
@@ -222,7 +218,7 @@ private:
                 if (invalid || !b || !e)
                     result << "<Inliner error>\n";
                 else
-                    result << std::string(b, e);
+                    result << string(b, e);
             }
 
             // Now output the result of file inclusion
@@ -232,12 +228,12 @@ private:
         return result.str();
     }
 
-    std::string getCanonicalPath(const FileEntry* entry) const {
+    string getCanonicalPath(const FileEntry* entry) const {
         const DirectoryEntry* dirEntry = entry->getDir();
         StringRef strRef = srcManager.getFileManager().getCanonicalName(dirEntry);
-        std::string res(strRef.begin(), strRef.end());
+        string res = strRef.str();
         res.push_back('/');
-        std::string fname(entry->getName());
+        string fname(entry->getName());
         int i = (int)fname.size() - 1;
         while (i >= 0 && fname[i] != '/' && fname[i] != '\\')
             --i;
@@ -246,11 +242,11 @@ private:
     }
 
     bool markAsIncluded(const FileEntry& entry) {
-        std::string fname = getCanonicalPath(&entry);
+        string fname = getCanonicalPath(&entry);
         return markAsIncluded(fname);
     }
 
-    bool markAsIncluded(const std::string& canonicalPath) {
+    bool markAsIncluded(const string& canonicalPath) {
         return includedHeaders.insert(canonicalPath).second;
     }
 
@@ -259,17 +255,13 @@ private:
         return srcManager.isInSystemHeader(loc);
     }
 
-    bool isSystemHeader(const FileEntry* entry) const {
-        return isSystemHeader(srcManager.translateFile(entry));
-    }
-
     bool isUserFile(SourceLocation loc) const {
         return !srcManager.isInSystemHeader(loc) && loc.isValid();
     }
 
     void debug() const {
         for (size_t i = 0; i < replacementStack.size(); ++i) {
-            llvm::errs() << replacementStack[i].fileName << " " <<
+            std::cerr << replacementStack[i].fileName << " " <<
                          replacementStack[i].replaceWith << "\n";
         }
     }
@@ -277,8 +269,8 @@ private:
 
 class InlinerFrontendAction : public ASTFrontendAction {
 private:
-    std::vector<IncludeReplacement>& replacementStack;
-    std::set<std::string>& includedHeaders;
+    vector<IncludeReplacement>& replacementStack;
+    set<string>& includedHeaders;
 
 public:
     InlinerFrontendAction(vector<IncludeReplacement>& _replacementStack,
@@ -287,7 +279,8 @@ public:
         , includedHeaders(_includedHeaders)
     {}
 
-    virtual std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance& compiler, StringRef /*file*/) {
+    virtual std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance& compiler, StringRef /*file*/) override
+    {
         compiler.getPreprocessor().addPPCallbacks(std::unique_ptr<TrackMacro>(new TrackMacro(
                 compiler.getSourceManager(), includedHeaders, replacementStack)));
 
@@ -297,32 +290,32 @@ public:
 
 class InlinerFrontendActionFactory: public tooling::FrontendActionFactory {
 private:
-    std::vector<IncludeReplacement>& replacementStack;
-    std::set<std::string>& includedHeaders;
+    vector<IncludeReplacement>& replacementStack;
+    set<string>& includedHeaders;
 
 public:
-    InlinerFrontendActionFactory(vector<IncludeReplacement>& _replacementStack,
-                                 set<string>& _includedHeaders)
-        : replacementStack(_replacementStack)
-        , includedHeaders(_includedHeaders)
+    InlinerFrontendActionFactory(vector<IncludeReplacement>& replacementStack_,
+                                 set<string>& includedHeaders_)
+        : replacementStack(replacementStack_)
+        , includedHeaders(includedHeaders_)
     {}
     FrontendAction* create() {
         return new InlinerFrontendAction(replacementStack, includedHeaders);
     }
 };
 
-Inliner::Inliner(const std::vector<std::string>& _cmdLineOptions)
-    : cmdLineOptions(_cmdLineOptions)
+Inliner::Inliner(const vector<string>& cmdLineOptions_)
+    : cmdLineOptions(cmdLineOptions_)
 {}
 
-std::string Inliner::doInline(const std::string& cppFile) {
-    std::auto_ptr<clang::tooling::FixedCompilationDatabase> compilationDatabase(
+string Inliner::doInline(const string& cppFile) {
+    std::unique_ptr<clang::tooling::FixedCompilationDatabase> compilationDatabase(
         createCompilationDatabaseFromCommandLine(cmdLineOptions));
 
-    std::vector<std::string> sources(1);
+    vector<string> sources(1);
     sources[0] = cppFile;
 
-    std::vector<IncludeReplacement> replacementStack;
+    vector<IncludeReplacement> replacementStack;
     InlinerFrontendActionFactory factory(replacementStack, includedHeaders);
 
     clang::tooling::ClangTool tool(*compilationDatabase, sources);

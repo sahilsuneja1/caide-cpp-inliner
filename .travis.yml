@@ -1,4 +1,5 @@
 language: cpp
+dist: trusty
 sudo: false
 git:
     submodules: false
@@ -8,7 +9,6 @@ addons:
         sources: &default_sources
             - ubuntu-toolchain-r-test
         packages: &default_packages
-            - libedit-dev
             - g++-4.9
             - gcc-4.9
             - binutils
@@ -16,42 +16,110 @@ addons:
 matrix:
     include:
         - env: CAIDE_USE_SYSTEM_CLANG=OFF
+        - env: CAIDE_CLANG_VERSION=3.6 CAIDE_USE_SYSTEM_CLANG=ON
           addons:
               apt:
                   sources:
                       - *default_sources
-                      - kubuntu-backports
                   packages:
                       - *default_packages
-                      - cmake
-
-        - env: CAIDE_USE_SYSTEM_CLANG=ON
-          addons:
-              apt:
-                  sources:
-                      - *default_sources
-                      - llvm-toolchain-precise-3.6
-                  packages:
-                      - *default_packages
+                      - libedit-dev
                       - libclang-3.6-dev
                       - llvm-3.6-dev
 
-        - env: CAIDE_USE_SYSTEM_CLANG=ON
+        - env: CAIDE_CLANG_VERSION=3.7 CAIDE_USE_SYSTEM_CLANG=ON
           addons:
               apt:
                   sources:
                       - *default_sources
-                      - llvm-toolchain-precise-3.7
+                      - llvm-toolchain-trusty-3.7
                   packages:
                       - *default_packages
+                      - libedit-dev
                       - libclang-3.7-dev
                       - llvm-3.7-dev
+
+        - env: CAIDE_CLANG_VERSION=3.8 CAIDE_USE_SYSTEM_CLANG=ON
+          addons:
+              apt:
+                  sources:
+                      - *default_sources
+                  packages:
+                      - *default_packages
+                      - libedit-dev
+                      - libclang-3.8-dev
+                      - llvm-3.8-dev
+
+        - env: CAIDE_CLANG_VERSION=3.9 CAIDE_USE_SYSTEM_CLANG=ON
+          addons:
+              apt:
+                  sources:
+                      - *default_sources
+                      - llvm-toolchain-trusty-3.9
+                  packages:
+                      - *default_packages
+                      - libedit-dev
+                      - libclang-3.9-dev
+                      - llvm-3.9-dev
+
+        - env: CAIDE_CLANG_VERSION=4.0 CAIDE_USE_SYSTEM_CLANG=ON
+          addons:
+              apt:
+                  sources:
+                      - *default_sources
+                      - llvm-toolchain-trusty-4.0
+                  packages:
+                      - *default_packages
+                      - libedit-dev
+                      - libclang-4.0-dev
+                      - llvm-4.0-dev
+
+        - env: CAIDE_CLANG_VERSION=5.0 CAIDE_USE_SYSTEM_CLANG=ON
+          addons:
+              apt:
+                  sources:
+                      - *default_sources
+                      - llvm-toolchain-trusty-5.0
+                  packages:
+                      - *default_packages
+                      - libedit-dev
+                      - libclang-5.0-dev
+                      - llvm-5.0-dev
+
+        - env: CAIDE_CLANG_VERSION=6.0 CAIDE_USE_SYSTEM_CLANG=ON
+          addons:
+              apt:
+                  sources:
+                      - *default_sources
+                      - llvm-toolchain-trusty-6.0
+                  packages:
+                      - *default_packages
+                      - libedit-dev
+                      - libclang-6.0-dev
+                      - llvm-6.0-dev
+    allow_failures:
+        - env: CAIDE_CLANG_VERSION=3.7 CAIDE_USE_SYSTEM_CLANG=ON
+        - env: CAIDE_CLANG_VERSION=3.9 CAIDE_USE_SYSTEM_CLANG=ON
+    fast_finish: true
+
+
+# https://github.com/boostorg/hana/blob/f36385d59f20776bbc17f5e32f9c3f7f75904a36/.travis.yml
+install:
+  - |
+    if [[ ${CAIDE_USE_SYSTEM_CLANG} == OFF || ${CAIDE_CLANG_VERSION} != "3."* ]]; then
+      DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+      mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
+      CMAKE_URL="https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz"
+      mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+      cd ${TRAVIS_BUILD_DIR}
+    fi
 
 
 script:  travis/build-and-test.sh
 
+
 notifications:
-    on_failure: always
     email:
-        on_success: always
+        on_failure: always
 

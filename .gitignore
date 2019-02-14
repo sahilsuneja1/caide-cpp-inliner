@@ -3,11 +3,10 @@
 *.o
 *.pyc
 
-/src/build
-/src/clangbuild*
-
 /tools/cfkeys.py
 
 /tests/temp/*
 !/tests/temp/keepme.txt
+
+tags
 

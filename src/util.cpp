@@ -5,16 +5,16 @@
 // option) any later version. See LICENSE.TXT for details.
 
 #include "util.h"
+#include "clang_version.h"
+
+#include <clang/AST/ASTContext.h>
+#include <clang/Basic/FileManager.h>
+#include <clang/Basic/SourceManager.h>
+#include <clang/Frontend/Utils.h>
+#include <clang/Lex/Preprocessor.h>
+
 #include <sstream>
-
-#include "clang/AST/ASTContext.h"
-#include "clang/Basic/FileManager.h"
-#include "clang/Basic/SourceManager.h"
-#include "clang/Frontend/Utils.h"
-#include "clang/Lex/Preprocessor.h"
-#include "llvm/Support/Host.h"
-#include "llvm/Support/raw_ostream.h"
-
+#include <string>
 
 using namespace clang;
 
@@ -74,7 +74,7 @@ SourceLocation findLocationAfterSemi(SourceLocation loc, ASTContext &Ctx) {
     return SemiLoc.getLocWithOffset(1);
 }
 
-clang::tooling::FixedCompilationDatabase* createCompilationDatabaseFromCommandLine(const std::vector<std::string> cmdLine)
+std::unique_ptr<tooling::FixedCompilationDatabase> createCompilationDatabaseFromCommandLine(const std::vector<std::string> cmdLine)
 {
     int argc = cmdLine.size() + 1;
     std::vector<const char*> argv(argc);
@@ -83,7 +83,13 @@ clang::tooling::FixedCompilationDatabase* createCompilationDatabaseFromCommandLi
     for (int i = 1; i < argc; ++i)
         argv[i] = cmdLine[i-1].c_str();
 
-    return clang::tooling::FixedCompilationDatabase::loadFromCommandLine(argc, &argv[0]);
+#if CAIDE_CLANG_VERSION_AT_LEAST(5,0)
+    std::string errorMessage;
+    return tooling::FixedCompilationDatabase::loadFromCommandLine(argc, &argv[0], errorMessage);
+#else
+    tooling::FixedCompilationDatabase* rawPtr = tooling::FixedCompilationDatabase::loadFromCommandLine(argc, &argv[0]);
+    return std::unique_ptr<tooling::FixedCompilationDatabase>(rawPtr);
+#endif
 }
 
 std::string rangeToString(SourceManager& sourceManager, const SourceLocation& start, const SourceLocation& end) {
@@ -132,17 +138,35 @@ std::string toString(SourceManager& sourceManager, const Decl* decl) {
     return std::string(b, std::min(b+30, e));
 }
 
+#if CAIDE_CLANG_VERSION_AT_LEAST(7, 0)
+static SourceLocation getBegin(const CharSourceRange& charSourceRange) {
+    return charSourceRange.getBegin();
+}
+
+static SourceLocation getEnd(const CharSourceRange& charSourceRange) {
+    return charSourceRange.getEnd();
+}
+#else
+static SourceLocation getBegin(const std::pair<SourceLocation, SourceLocation>& charSourceRange) {
+    return charSourceRange.first;
+}
+
+static SourceLocation getEnd(const std::pair<SourceLocation, SourceLocation>& charSourceRange) {
+    return charSourceRange.second;
+}
+#endif
+
 SourceLocation getExpansionStart(SourceManager& sourceManager, const Decl* decl) {
     SourceLocation start = decl->getLocStart();
     if (start.isMacroID())
-        start = sourceManager.getExpansionRange(start).first;
+        start = getBegin(sourceManager.getExpansionRange(start));
     return start;
 }
 
 SourceLocation getExpansionEnd(SourceManager& sourceManager, const Decl* decl) {
     SourceLocation end = decl->getLocEnd();
     if (end.isMacroID())
-        end = sourceManager.getExpansionRange(end).second;
+        end = getEnd(sourceManager.getExpansionRange(end));
     return end;
 }
 

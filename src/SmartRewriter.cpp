@@ -5,8 +5,9 @@
 // option) any later version. See LICENSE.TXT for details.
 
 #include "SmartRewriter.h"
+#include "SourceLocationComparers.h"
 
-#include "clang/Basic/SourceManager.h"
+#include <clang/Basic/SourceManager.h>
 
 #include <stdexcept>
 
@@ -15,56 +16,24 @@ using namespace clang;
 namespace caide {
 namespace internal {
 
-bool SourceLocationComparer::operator() (const SourceLocation& lhs, const SourceLocation& rhs) const {
-    return rewriter->getSourceMgr().isBeforeInTranslationUnit(lhs, rhs);
-}
-
-bool SourceRangeComparer::operator() (const clang::SourceRange& lhs, const clang::SourceRange& rhs) const {
-    return cmp(lhs.getBegin(), rhs.getBegin()) ||
-            (lhs.getBegin() == rhs.getBegin() && cmp(lhs.getEnd(), rhs.getEnd()));
-}
-
-bool RewriteItemComparer::operator() (const RewriteItem& lhs, const RewriteItem& rhs) const {
-    return cmp(lhs.range.getBegin(), rhs.range.getBegin());
-}
-
-SmartRewriter::SmartRewriter(clang::Rewriter& rewriter_)
-    : rewriter(rewriter_)
+SmartRewriter::SmartRewriter(SourceManager& srcManager, const LangOptions& langOptions)
+    : rewriter(srcManager, langOptions)
+    , comparer(srcManager)
+    , removed(comparer)
     , changesApplied(false)
 {
-    comparer.cmp.rewriter = &rewriter_;
-    removed = std::set<RewriteItem, RewriteItemComparer>(comparer);
 }
 
-bool SmartRewriter::removeRange(const SourceRange& range, Rewriter::RewriteOptions opts) {
-    if (!canRemoveRange(range))
-        return false;
-    removed.insert({range, opts});
-    return true;
+void SmartRewriter::removeRange(SourceLocation begin, SourceLocation end) {
+    removed.add(begin, end);
 }
 
-bool SmartRewriter::canRemoveRange(const SourceRange& range) const {
-    if (removed.empty())
-        return true;
+void SmartRewriter::removeRange(const SourceRange& range) {
+    removeRange(range.getBegin(), range.getEnd());
+}
 
-    RewriteItem ri;
-    ri.range = range;
-
-    auto i = removed.lower_bound(ri);
-    // i->range.getBegin() >= range.getBegin()
-
-    const SourceManager& srcManager = rewriter.getSourceMgr();
-
-    if (i != removed.end() && !srcManager.isBeforeInTranslationUnit(range.getEnd(), i->range.getBegin()))
-        return false;
-
-    if (i == removed.begin())
-        return true;
-
-    --i;
-    // i->range.getBegin() < range.getBegin()
-
-    return srcManager.isBeforeInTranslationUnit(i->range.getEnd(), range.getBegin());
+bool SmartRewriter::isPartOfRangeRemoved(const SourceRange& range) const {
+    return removed.intersects(range.getBegin(), range.getEnd());
 }
 
 const RewriteBuffer* SmartRewriter::getRewriteBufferFor(FileID fileID) const {
@@ -75,8 +44,9 @@ void SmartRewriter::applyChanges() {
     if (changesApplied)
         throw std::logic_error("Rewriter changes have already been applied");
     changesApplied = true;
-    for (const RewriteItem& ri : removed)
-        rewriter.RemoveText(ri.range, ri.opts);
+    Rewriter::RewriteOptions opts;
+    for (const auto& range : removed)
+        rewriter.RemoveText(SourceRange(range.first, range.second), opts);
 }
 
 }

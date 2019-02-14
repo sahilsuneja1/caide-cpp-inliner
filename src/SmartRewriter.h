@@ -6,49 +6,37 @@
 
 #pragma once
 
-#include <set>
-#include <vector>
+#include "IntervalSet.h"
+#include "SourceLocationComparers.h"
 
-#include "clang/Rewrite/Core/Rewriter.h"
+#include <clang/Rewrite/Core/Rewriter.h>
 
+namespace clang {
+    class LangOptions;
+    class SourceManager;
+}
 
 namespace caide {
 namespace internal {
 
-struct RewriteItem {
-    clang::SourceRange range;
-    clang::Rewriter::RewriteOptions opts;
-};
-
-struct SourceLocationComparer {
-    bool operator() (const clang::SourceLocation& lhs, const clang::SourceLocation& rhs) const;
-    clang::Rewriter* rewriter;
-};
-
-struct SourceRangeComparer {
-    bool operator() (const clang::SourceRange& lhs, const clang::SourceRange& rhs) const;
-    SourceLocationComparer cmp;
-};
-
-struct RewriteItemComparer {
-    bool operator() (const RewriteItem& lhs, const RewriteItem& rhs) const;
-    SourceLocationComparer cmp;
-};
-
-
 class SmartRewriter {
 public:
-    explicit SmartRewriter(clang::Rewriter& _rewriter);
+    SmartRewriter(clang::SourceManager& sourceManager, const clang::LangOptions& langOptions);
+    SmartRewriter(const SmartRewriter&) = delete;
+    SmartRewriter& operator=(const SmartRewriter&) = delete;
+    SmartRewriter(SmartRewriter&&) = delete;
+    SmartRewriter& operator=(SmartRewriter&&) = delete;
 
-    bool canRemoveRange(const clang::SourceRange& range) const;
-    bool removeRange(const clang::SourceRange& range, clang::Rewriter::RewriteOptions opts);
+    bool isPartOfRangeRemoved(const clang::SourceRange& range) const;
+    void removeRange(clang::SourceLocation begin, clang::SourceLocation end);
+    void removeRange(const clang::SourceRange& range);
     const clang::RewriteBuffer* getRewriteBufferFor(clang::FileID fileID) const;
     void applyChanges();
 
 private:
-    clang::Rewriter& rewriter;
-    std::set<RewriteItem, RewriteItemComparer> removed;
-    RewriteItemComparer comparer;
+    clang::Rewriter rewriter;
+    SourceLocationComparer comparer;
+    IntervalSet<clang::SourceLocation, SourceLocationComparer> removed;
     bool changesApplied;
 };
 

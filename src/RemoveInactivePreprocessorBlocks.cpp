@@ -5,16 +5,23 @@
 // option) any later version. See LICENSE.TXT for details.
 
 #include "RemoveInactivePreprocessorBlocks.h"
-#include "clang/Basic/SourceManager.h"
-#include "clang/Lex/Preprocessor.h"
-
-#include <map>
-#include <vector>
-
 #include "SmartRewriter.h"
 
-using namespace std;
+#include <clang/Basic/SourceManager.h>
+#include <clang/Lex/Preprocessor.h>
+
+#include <map>
+#include <set>
+#include <string>
+#include <vector>
+
+
 using namespace clang;
+using std::map;
+using std::set;
+using std::string;
+using std::vector;
+
 
 namespace caide {
 namespace internal {
@@ -40,6 +47,7 @@ struct Macro {
     SourceRange definition;
     vector<SourceRange> usages;
     SourceLocation undefinition;
+    bool isWhitelisted = false;
 };
 
 struct RemoveInactivePreprocessorBlocks::RemoveInactivePreprocessorBlocksImpl {
@@ -66,24 +74,24 @@ private:
         return macrosToKeep.find(macroName) != macrosToKeep.end();
     }
 
-    void removeMacro(const Macro& macro) {
+    void removeMacroIfUnused(const Macro& macro) {
+        if (macro.isWhitelisted)
+            return;
+
         for (const SourceRange& usageRange : macro.usages) {
-            if (rewriter.canRemoveRange(usageRange)) {
+            if (!rewriter.isPartOfRangeRemoved(usageRange)) {
                 // The usage of the macro has not been removed, so
                 // we can't remove the definition
                 return;
             }
         }
 
-        Rewriter::RewriteOptions opts;
-        opts.RemoveLineIfEmpty = true;
-
-        rewriter.removeRange(macro.definition, opts);
+        rewriter.removeRange(macro.definition);
 
         if (macro.undefinition.isValid()) {
             SourceLocation b = changeColumn(macro.undefinition, 1);
             SourceLocation e = changeColumn(macro.undefinition, 10000);
-            rewriter.removeRange(SourceRange(b, e), opts);
+            rewriter.removeRange(b, e);
         }
     }
 
@@ -103,7 +111,9 @@ public:
     }
 
     void MacroDefined(const Token& MacroNameTok, const MacroDirective* MD) {
-        definedMacroNames.insert(getTokenName(MacroNameTok));
+        string macroName = getTokenName(MacroNameTok);
+        bool isWhitelisted = isWhitelistedMacro(macroName);
+        definedMacroNames.insert(std::move(macroName));
 
         if (MD && isInMainFile(MD->getLocation())) {
             SourceLocation b = MD->getLocation(), e;
@@ -114,16 +124,14 @@ public:
 
             b = changeColumn(b, 1);
 
-            definedMacros[MD].definition = SourceRange(b, e);
+            Macro macro;
+            macro.definition = SourceRange(b, e);
+            macro.isWhitelisted = isWhitelisted;
+            definedMacros[MD] = std::move(macro);
         }
     }
 
-#if CAIDE_CLANG_VERSION_AT_LEAST(3,7)
-    void MacroUndefined(const Token& MacroNameTok, const MacroDefinition& MacroDef) {
-        const DefMacroDirective* MD = MacroDef.getLocalDirective();
-#else
     void MacroUndefined(const Token& MacroNameTok, const MacroDirective* MD) {
-#endif
         definedMacroNames.erase(getTokenName(MacroNameTok));
 
         if (!MD || !isInMainFile(MD->getLocation()))
@@ -138,16 +146,8 @@ public:
         }
     }
 
-#if CAIDE_CLANG_VERSION_AT_LEAST(3,7)
-    void MacroExpands(const Token& /*MacroNameTok*/, const MacroDefinition& MacroDef,
-                      SourceRange Range, const MacroArgs* /*Args*/)
+    void MacroExpands(const MacroDirective* MD, SourceRange Range)
     {
-        const DefMacroDirective* MD = MacroDef.getLocalDirective();
-#else
-    void MacroExpands(const Token& /*MacroNameTok*/, const MacroDirective* MD,
-                      SourceRange Range, const MacroArgs* /*Args*/)
-    {
-#endif
         if (!MD || !isInMainFile(MD->getLocation()))
             return;
 
@@ -157,17 +157,14 @@ public:
     void Finalize() {
         // Remove unused #defines that don't have a corresponding #undef
         for (auto it = definedMacros.begin(); it != definedMacros.end(); ++it)
-            removeMacro(it->second);
+            removeMacroIfUnused(it->second);
 
         // Remove unused #define / #undef pairs
         for (const Macro& macro : undefinedMacros)
-            removeMacro(macro);
-
-        Rewriter::RewriteOptions opts;
-        opts.RemoveLineIfEmpty = true;
+            removeMacroIfUnused(macro);
 
         for (const SourceRange& range: inactiveBranches)
-            rewriter.removeRange(range, opts);
+            rewriter.removeRange(range);
     }
 
     void If(SourceLocation Loc, SourceRange ConditionRange, ConditionValueKind ConditionValue) {
@@ -180,11 +177,7 @@ public:
             activeClauses.back().keepAllBranches = true;
     }
 
-#if CAIDE_CLANG_VERSION_AT_LEAST(3,7)
-    void Ifdef(SourceLocation Loc, const Token& MacroNameTok, const MacroDefinition& /*MD*/) {
-#else
-    void Ifdef(SourceLocation Loc, const Token& MacroNameTok, const MacroDirective* /*MD*/) {
-#endif
+    void Ifdef(SourceLocation Loc, const Token& MacroNameTok) {
         if (!isInMainFile(Loc))
             return;
         activeClauses.push_back(IfDefClause(Loc));
@@ -195,11 +188,7 @@ public:
             activeClauses.back().keepAllBranches = true;
     }
 
-#if CAIDE_CLANG_VERSION_AT_LEAST(3,7)
-    void Ifndef(SourceLocation Loc, const Token& MacroNameTok, const MacroDefinition& /*MD*/) {
-#else
-    void Ifndef(SourceLocation Loc, const Token& MacroNameTok, const MacroDirective* /*MD*/) {
-#endif
+    void Ifndef(SourceLocation Loc, const Token& MacroNameTok) {
         if (!isInMainFile(Loc))
             return;
         activeClauses.push_back(IfDefClause(Loc));
@@ -264,7 +253,7 @@ private:
     }
 
     SourceLocation changeColumn(SourceLocation loc, unsigned col) const {
-        pair<FileID, unsigned> decomposedLoc = sourceManager.getDecomposedLoc(loc);
+        std::pair<FileID, unsigned> decomposedLoc = sourceManager.getDecomposedLoc(loc);
         FileID fileId = decomposedLoc.first;
         unsigned filePos = decomposedLoc.second;
         unsigned line = sourceManager.getLineNumber(fileId, filePos);
@@ -300,66 +289,81 @@ void RemoveInactivePreprocessorBlocks::MacroDefined(
     impl->MacroDefined(MacroNameTok, MD);
 }
 
-#if CAIDE_CLANG_VERSION_AT_LEAST(3,7)
+#if CAIDE_CLANG_VERSION_AT_LEAST(5,0)
 void RemoveInactivePreprocessorBlocks::MacroUndefined(
-        const Token& MacroNameTok, const MacroDefinition& MD)
+    const Token& MacroNameTok, const MacroDefinition& MacroDef, const MacroDirective* /*Undef*/)
+{
+    const DefMacroDirective* MD = MacroDef.getLocalDirective();
+    impl->MacroUndefined(MacroNameTok, MD);
+}
+#elif CAIDE_CLANG_VERSION_AT_LEAST(3,7)
+void RemoveInactivePreprocessorBlocks::MacroUndefined(
+    const Token& MacroNameTok, const MacroDefinition& MacroDef)
+{
+    const DefMacroDirective* MD = MacroDef.getLocalDirective();
+    impl->MacroUndefined(MacroNameTok, MD);
+}
 #else
 void RemoveInactivePreprocessorBlocks::MacroUndefined(
-        const Token& MacroNameTok, const MacroDirective* MD)
-#endif
+    const Token& MacroNameTok, const MacroDirective* MD)
 {
     impl->MacroUndefined(MacroNameTok, MD);
 }
+#endif
 
 #if CAIDE_CLANG_VERSION_AT_LEAST(3,7)
 void RemoveInactivePreprocessorBlocks::MacroExpands(
-        const Token& MacroNameTok, const MacroDefinition& MD,
-        SourceRange Range, const MacroArgs* Args)
+    const Token& /*MacroNameTok*/, const MacroDefinition& MacroDef,
+    SourceRange Range, const MacroArgs* /*Args*/)
+{
+    const DefMacroDirective* MD = MacroDef.getLocalDirective();
+    impl->MacroExpands(MD, Range);
+}
 #else
 void RemoveInactivePreprocessorBlocks::MacroExpands(
-        const Token& MacroNameTok, const MacroDirective* MD,
-        SourceRange Range, const MacroArgs* Args)
-#endif
+    const Token& /*MacroNameTok*/, const MacroDirective* MD,
+    SourceRange Range, const MacroArgs* /*Args*/)
 {
-    impl->MacroExpands(MacroNameTok, MD, Range, Args);
+    impl->MacroExpands(MD, Range);
 }
+#endif
 
 void RemoveInactivePreprocessorBlocks::Finalize() {
     impl->Finalize();
 }
 
 void RemoveInactivePreprocessorBlocks::If(
-        SourceLocation Loc, SourceRange ConditionRange,
-        ConditionValueKind ConditionValue)
+    SourceLocation Loc, SourceRange ConditionRange,
+    ConditionValueKind ConditionValue)
 {
     impl->If(Loc, ConditionRange, ConditionValue);
 }
 
 #if CAIDE_CLANG_VERSION_AT_LEAST(3,7)
 void RemoveInactivePreprocessorBlocks::Ifdef(
-        SourceLocation Loc, const Token& MacroNameTok, const MacroDefinition& MD)
+    SourceLocation Loc, const Token& MacroNameTok, const MacroDefinition&)
 #else
 void RemoveInactivePreprocessorBlocks::Ifdef(
-        SourceLocation Loc, const Token& MacroNameTok, const MacroDirective* MD)
+    SourceLocation Loc, const Token& MacroNameTok, const MacroDirective*)
 #endif
 {
-    impl->Ifdef(Loc, MacroNameTok, MD);
+    impl->Ifdef(Loc, MacroNameTok);
 }
 
 #if CAIDE_CLANG_VERSION_AT_LEAST(3,7)
 void RemoveInactivePreprocessorBlocks::Ifndef(
-        SourceLocation Loc, const Token& MacroNameTok, const MacroDefinition& MD)
+    SourceLocation Loc, const Token& MacroNameTok, const MacroDefinition&)
 #else
 void RemoveInactivePreprocessorBlocks::Ifndef(
-        SourceLocation Loc, const Token& MacroNameTok, const MacroDirective* MD)
+    SourceLocation Loc, const Token& MacroNameTok, const MacroDirective*)
 #endif
 {
-    impl->Ifndef(Loc, MacroNameTok, MD);
+    impl->Ifndef(Loc, MacroNameTok);
 }
 
 void RemoveInactivePreprocessorBlocks::Elif(
-        SourceLocation Loc, SourceRange ConditionRange,
-        ConditionValueKind ConditionValue, SourceLocation IfLoc)
+    SourceLocation Loc, SourceRange ConditionRange,
+    ConditionValueKind ConditionValue, SourceLocation IfLoc)
 {
     impl->Elif(Loc, ConditionRange, ConditionValue, IfLoc);
 }
