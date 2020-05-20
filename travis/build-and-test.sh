@@ -1,8 +1,7 @@
 #!/bin/bash
 set -ev
 
-# export CXX=g++-7
-# export CC=gcc-7
+export CXXFLAGS=-std=c++14
 
 env
 cmake --version
@@ -23,9 +22,6 @@ then
             export LLVM_DIR=/usr/lib/llvm-$CAIDE_CLANG_VERSION/
             ;;
     esac
-else
-    git submodule update --init
-    date
 fi
 
 mkdir build
@@ -35,6 +31,10 @@ cmake -DCAIDE_USE_SYSTEM_CLANG=$CAIDE_USE_SYSTEM_CLANG \
 # First build may run out of memory
 make -j3 || make -j1
 
+date
+
+# One of the tests requires clang/lib/Headers include directory
+git submodule update --init --depth 1
 date
 
 ctest --verbose
