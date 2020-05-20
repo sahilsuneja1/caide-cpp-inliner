@@ -115,7 +115,7 @@ endfunction(add_compiler_option_if_supported)
 
 # CXX_STANDARD() is available only in cmake >= 3
 # Set c++11 flag explicitly
-add_compiler_option_if_supported("-std=c++11")
+add_compiler_option_if_supported("-std=c++14")
 
 if(MSVC)
     # Use the highest warning level for Visual Studio.

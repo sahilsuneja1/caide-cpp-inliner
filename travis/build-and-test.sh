@@ -3,7 +3,7 @@ set -ev
 
 export CXX=g++-9
 export CC=gcc-9
-export CXXFLAGS=--std=c++14
+export CXXFLAGS=-std=c++14
 
 env
 cmake --version
