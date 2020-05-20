@@ -5,7 +5,7 @@ git:
   submodules: false
 addons:
   apt:
-    packages: &default_packages ['gcc-9', 'g++-9', 'cmake']
+    packages: &default_packages ['gcc-9', 'g++-9']
     sources: &default_sources ['ubuntu-toolchain-r-test']
 
 matrix:
@@ -77,7 +77,7 @@ matrix:
           - libclang-6.0-dev
           - llvm-6.0-dev
 
-    - env: CAIDE_CLANG_VERSION=7.0 CAIDE_USE_SYSTEM_CLANG=ON
+    - env: CAIDE_CLANG_VERSION=7 CAIDE_USE_SYSTEM_CLANG=ON
       addons:
         apt:
           sources:
@@ -90,7 +90,7 @@ matrix:
           - libclang-7-dev
           - llvm-7-dev
 
-    - env: CAIDE_CLANG_VERSION=8.0 CAIDE_USE_SYSTEM_CLANG=ON
+    - env: CAIDE_CLANG_VERSION=8 CAIDE_USE_SYSTEM_CLANG=ON
       addons:
         apt:
           sources:
@@ -103,7 +103,7 @@ matrix:
           - libclang-8-dev
           - llvm-8-dev
 
-    - env: CAIDE_CLANG_VERSION=9.0 CAIDE_USE_SYSTEM_CLANG=ON
+    - env: CAIDE_CLANG_VERSION=9 CAIDE_USE_SYSTEM_CLANG=ON
       addons:
         apt:
           sources:
@@ -116,7 +116,7 @@ matrix:
           - libclang-9-dev
           - llvm-9-dev
 
-    - env: CAIDE_CLANG_VERSION=10.0 CAIDE_USE_SYSTEM_CLANG=ON
+    - env: CAIDE_CLANG_VERSION=10 CAIDE_USE_SYSTEM_CLANG=ON
       addons:
         apt:
           sources:
@@ -130,8 +130,9 @@ matrix:
           - llvm-10-dev
 
   allow_failures:
-  - env: CAIDE_CLANG_VERSION=7.0 CAIDE_USE_SYSTEM_CLANG=ON
-  - env: CAIDE_CLANG_VERSION=8.0 CAIDE_USE_SYSTEM_CLANG=ON
+  - env: CAIDE_CLANG_VERSION=3.8 CAIDE_USE_SYSTEM_CLANG=ON
+  - env: CAIDE_CLANG_VERSION=7 CAIDE_USE_SYSTEM_CLANG=ON
+  - env: CAIDE_CLANG_VERSION=8 CAIDE_USE_SYSTEM_CLANG=ON
 
   fast_finish: true
 

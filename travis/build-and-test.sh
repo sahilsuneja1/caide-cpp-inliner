@@ -13,6 +13,9 @@ date
 
 if [ "$CAIDE_USE_SYSTEM_CLANG" = "ON" ]
 then
+    # Debug
+    llvm-config-"$CAIDE_CLANG_VERSION" --cxxflags --cflags --ldflags --has-rtti
+
     # Tell CMake where to look for LLVMConfig
     case "$CAIDE_CLANG_VERSION" in
         3.6|3.7)
