@@ -30,7 +30,8 @@ date
 
 mkdir build
 cd build
-cmake -DCAIDE_USE_SYSTEM_CLANG=$CAIDE_USE_SYSTEM_CLANG -DCMAKE_BUILD_TYPE=MinSizeRel ../src
+cmake -DCAIDE_USE_SYSTEM_CLANG=$CAIDE_USE_SYSTEM_CLANG \
+    -DCAIDE_CLANG_VERSION="$CAIDE_CLANG_VERSION" -DCMAKE_BUILD_TYPE=MinSizeRel ../src
 # First build may run out of memory
 make -j3 || make -j1
 
