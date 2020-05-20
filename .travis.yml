@@ -3,6 +3,10 @@ dist: xenial
 sudo: false
 git:
   submodules: false
+addons:
+  apt:
+    packages: &default_packages ['gcc-9', 'g++-9', 'cmake']
+    sources: &default_sources ['ubuntu-toolchain-r-test']
 
 matrix:
   include:
