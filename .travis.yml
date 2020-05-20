@@ -7,7 +7,7 @@ git:
 addons:
   apt:
     packages: &default_packages
-    - g++-7
+    - g++
 
 matrix:
     include:
