@@ -10,12 +10,11 @@ cmake --version
 "$CC" --version
 date
 
-git submodule update --init
 if [ "$CAIDE_USE_SYSTEM_CLANG" = "ON" ]
 then
     # Tell CMake where to look for LLVMConfig
     case "$CAIDE_CLANG_VERSION" in
-        3.6|3.7|3.8)
+        3.6|3.7)
             # CMake packaging for these is broken in Ubuntu
             export LLVM_DIR="$TRAVIS_BUILD_DIR/travis/cmake/$CAIDE_CLANG_VERSION/"
             ;;
@@ -24,9 +23,10 @@ then
             export LLVM_DIR=/usr/lib/llvm-$CAIDE_CLANG_VERSION/
             ;;
     esac
+else
+    git submodule update --init
+    date
 fi
-
-date
 
 mkdir build
 cd build
