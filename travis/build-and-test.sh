@@ -1,8 +1,8 @@
 #!/bin/bash
 set -ev
 
-# export CXX=g++-9
-# export CC=gcc-9
+export CXX=g++-9
+export CC=gcc-9
 # export CXXFLAGS=-std=c++14
 
 env | sort
@@ -18,7 +18,6 @@ then
 
     cxxver="-std=c++11"
 
-    # Tell CMake where to look for LLVMConfig
     case "$CAIDE_CLANG_VERSION" in
         3.6|3.7)
             # CMake packaging for these is broken in Ubuntu
@@ -30,13 +29,11 @@ then
         10)
             cxxver="-std=c++14"
             ;;
-
-        *)
-            export LLVM_DIR=/usr/lib/llvm-$CAIDE_CLANG_VERSION/
-            ;;
     esac
 
     export CXXFLAGS="$CXXFLAGS $cxxver"
+    export LLVM_ROOT="/usr/lib/llvm-$CAIDE_CLANG_VERSION"
+    export CLANG_ROOT="/usr/lib/llvm-$CAIDE_CLANG_VERSION"
 fi
 
 mkdir build

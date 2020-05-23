@@ -5,8 +5,8 @@ git:
   submodules: false
 addons:
   apt:
-    packages: &default_packages []
-    sources: &default_sources []
+    packages: &default_packages ['gcc-9', 'g++-9']
+    sources: &default_sources ['ubuntu-toolchain-r-test']
 
 matrix:
   include:
@@ -22,7 +22,7 @@ matrix:
           packages:
           - *default_packages
           - libedit-dev
-          - libclang-3.8-dev
+          - clang-3.8
           - llvm-3.8-dev
 
     - env: CAIDE_CLANG_VERSION=3.9 CAIDE_USE_SYSTEM_CLANG=ON
@@ -35,7 +35,7 @@ matrix:
           packages:
           - *default_packages
           - libedit-dev
-          - libclang-3.9-dev
+          - clang-3.9
           - llvm-3.9-dev
 
     - env: CAIDE_CLANG_VERSION=4.0 CAIDE_USE_SYSTEM_CLANG=ON
@@ -48,7 +48,7 @@ matrix:
           packages:
           - *default_packages
           - libedit-dev
-          - libclang-4.0-dev
+          - clang-4.0
           - llvm-4.0-dev
 
     - env: CAIDE_CLANG_VERSION=5.0 CAIDE_USE_SYSTEM_CLANG=ON
@@ -61,7 +61,7 @@ matrix:
           packages:
           - *default_packages
           - libedit-dev
-          - libclang-5.0-dev
+          - clang-5.0
           - llvm-5.0-dev
 
     - env: CAIDE_CLANG_VERSION=6.0 CAIDE_USE_SYSTEM_CLANG=ON
@@ -74,7 +74,7 @@ matrix:
           packages:
           - *default_packages
           - libedit-dev
-          - libclang-6.0-dev
+          - clang-6.0
           - llvm-6.0-dev
 
     - env: CAIDE_CLANG_VERSION=7 CAIDE_USE_SYSTEM_CLANG=ON
@@ -87,7 +87,7 @@ matrix:
           packages:
           - *default_packages
           - libedit-dev
-          - libclang-7-dev
+          - clang-7
           - llvm-7-dev
 
     - env: CAIDE_CLANG_VERSION=8 CAIDE_USE_SYSTEM_CLANG=ON
@@ -100,7 +100,7 @@ matrix:
           packages:
           - *default_packages
           - libedit-dev
-          - libclang-8-dev
+          - clang-8
           - llvm-8-dev
 
     - env: CAIDE_CLANG_VERSION=9 CAIDE_USE_SYSTEM_CLANG=ON
@@ -113,7 +113,7 @@ matrix:
           packages:
           - *default_packages
           - libedit-dev
-          - libclang-9-dev
+          - clang-9
           - llvm-9-dev
 
     - env: CAIDE_CLANG_VERSION=10 CAIDE_USE_SYSTEM_CLANG=ON
@@ -126,7 +126,7 @@ matrix:
           packages:
           - *default_packages
           - libedit-dev
-          - libclang-10-dev
+          - clang-10
           - llvm-10-dev
 
   allow_failures:
@@ -134,7 +134,7 @@ matrix:
   - env: CAIDE_CLANG_VERSION=7 CAIDE_USE_SYSTEM_CLANG=ON
   - env: CAIDE_CLANG_VERSION=8 CAIDE_USE_SYSTEM_CLANG=ON
 
-  fast_finish: true
+  fast_finish: false
 
 
 script:  travis/build-and-test.sh
