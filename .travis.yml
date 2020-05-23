@@ -5,8 +5,8 @@ git:
   submodules: false
 addons:
   apt:
-    packages: &default_packages ['gcc-9', 'g++-9']
-    sources: &default_sources ['ubuntu-toolchain-r-test']
+    packages: &default_packages []
+    sources: &default_sources []
 
 matrix:
   include:

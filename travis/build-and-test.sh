@@ -1,8 +1,8 @@
 #!/bin/bash
 set -ev
 
-export CXX=g++-9
-export CC=gcc-9
+# export CXX=g++-9
+# export CC=gcc-9
 # export CXXFLAGS=-std=c++14
 
 env | sort
