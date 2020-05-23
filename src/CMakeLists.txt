@@ -3,6 +3,9 @@ project(CaideInliner)
 
 option(CAIDE_USE_SYSTEM_CLANG "Use system clang/llvm instead of compiling it from scratch" OFF)
 
+# find_package(Clang REQUIRED)
+# https://llvm.org/docs/CMake.html#embedding-llvm-in-your-project
+
 if(CAIDE_USE_SYSTEM_CLANG)
     if(DEFINED CAIDE_CLANG_VERSION)
         find_package(LLVM ${CAIDE_CLANG_VERSION} REQUIRED CONFIG)
@@ -39,16 +42,17 @@ else()
     add_subdirectory(llvm-project/llvm EXCLUDE_FROM_ALL)
 
     # TODO: can we do this instead of hardcoding LLVM_ variables below?
-    #include("${CMAKE_BINARY_DIR}/cmake/modules/CMakeFiles/LLVMConfig.cmake")
+    #include("${CMAKE_BINARY_DIR}/llvm-project/llvm/cmake/modules/CMakeFiles/LLVMConfig.cmake")
+    #include("${CMAKE_BINARY_DIR}/lib/cmake/clang/ClangConfig.cmake")
 
     set(LLVM_PACKAGE_VERSION "10.0.0")
-    message(STATUS "Using LLVM from submodule ${LLVM_PACKAGE_VERSION}")
-
     set(LLVM_LIBRARY_DIRS "${CMAKE_CURRENT_BINARY_DIR}/llvm-project/llvm/lib")
     set(LLVM_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/llvm-project/llvm/include"
         "${CMAKE_CURRENT_SOURCE_DIR}/llvm-project/clang/include" "${CMAKE_CURRENT_BINARY_DIR}/llvm-project/llvm/include"
         "${CMAKE_CURRENT_BINARY_DIR}/llvm-project/llvm/tools/clang/include")
     set(LLVM_DEFINITIONS "-D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS")
+
+    message(STATUS "Using LLVM from submodule ${LLVM_PACKAGE_VERSION}")
 endif()
 
 if(LLVM_PACKAGE_VERSION VERSION_LESS "3.8")
@@ -115,7 +119,7 @@ endfunction(add_compiler_option_if_supported)
 
 # CXX_STANDARD() is available only in cmake >= 3
 # Set c++11 flag explicitly
-add_compiler_option_if_supported("-std=c++14")
+# add_compiler_option_if_supported("-std=c++14")
 
 if(MSVC)
     # Use the highest warning level for Visual Studio.

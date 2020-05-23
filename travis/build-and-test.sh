@@ -3,9 +3,9 @@ set -ev
 
 export CXX=g++-9
 export CC=gcc-9
-export CXXFLAGS=-std=c++14
+# export CXXFLAGS=-std=c++14
 
-env
+env | sort
 cmake --version
 "$CXX" --version
 "$CC" --version
@@ -16,17 +16,27 @@ then
     # Debug
     llvm-config-"$CAIDE_CLANG_VERSION" --cxxflags --cflags --ldflags --has-rtti
 
+    cxxver="-std=c++11"
+
     # Tell CMake where to look for LLVMConfig
     case "$CAIDE_CLANG_VERSION" in
         3.6|3.7)
             # CMake packaging for these is broken in Ubuntu
             export LLVM_DIR="$TRAVIS_BUILD_DIR/travis/cmake/$CAIDE_CLANG_VERSION/"
             ;;
+        7)
+            cxxver=""
+            ;;
+        10)
+            cxxver="-std=c++14"
+            ;;
 
         *)
             export LLVM_DIR=/usr/lib/llvm-$CAIDE_CLANG_VERSION/
             ;;
     esac
+
+    export CXXFLAGS="$CXXFLAGS $cxxver"
 fi
 
 mkdir build
