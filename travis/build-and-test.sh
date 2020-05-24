@@ -19,10 +19,6 @@ then
     cxxver="-std=c++11"
 
     case "$CAIDE_CLANG_VERSION" in
-        3.6|3.7)
-            # CMake packaging for these is broken in Ubuntu
-            export LLVM_DIR="$TRAVIS_BUILD_DIR/travis/cmake/$CAIDE_CLANG_VERSION/"
-            ;;
         7)
             cxxver=""
             ;;
@@ -32,8 +28,10 @@ then
     esac
 
     export CXXFLAGS="$CXXFLAGS $cxxver"
-    export LLVM_ROOT="/usr/lib/llvm-$CAIDE_CLANG_VERSION"
-    export CLANG_ROOT="/usr/lib/llvm-$CAIDE_CLANG_VERSION"
+    export LLVM_ROOT=/usr/lib/llvm-$CAIDE_CLANG_VERSION
+    export CLANG_ROOT=/usr/lib/llvm-$CAIDE_CLANG_VERSION
+    export Clang_ROOT=/usr/lib/llvm-$CAIDE_CLANG_VERSION
+    export LLVM_DIR=/usr/lib/llvm-$CAIDE_CLANG_VERSION/lib/cmake/llvm
 fi
 
 mkdir build
