@@ -14,14 +14,12 @@ then
     export Clang_ROOT=/usr/lib/llvm-$CAIDE_CLANG_VERSION
 
     case "$CAIDE_CLANG_VERSION" in
-        3.8)
-            export Clang_ROOT=
-            export LLVM_ROOT=/usr/share/llvm-3.8
+        3.8|3.9|4.0)
+            # CMake packaging is broken in these
+            export Clang_ROOT="$TRAVIS_BUILD_DIR/travis/cmake/$CAIDE_CLANG_VERSION"
+            export LLVM_ROOT="$Clang_ROOT"
             ;;
 
-        3.9|4.0)
-            export Clang_ROOT=/usr/share/llvm-$CAIDE_CLANG_VERSION
-            ;;
         7)
             cxxver=""
             ;;
