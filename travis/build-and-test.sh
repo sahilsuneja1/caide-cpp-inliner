@@ -5,12 +5,6 @@ export CXX=g++-9
 export CC=gcc-9
 # export CXXFLAGS=-std=c++14
 
-env | sort
-cmake --version
-"$CXX" --version
-"$CC" --version
-date
-
 if [ "$CAIDE_USE_SYSTEM_CLANG" = "ON" ]
 then
     # Debug
@@ -28,11 +22,15 @@ then
     esac
 
     export CXXFLAGS="$CXXFLAGS $cxxver"
-    export LLVM_ROOT=/usr/lib/llvm-$CAIDE_CLANG_VERSION
-    export CLANG_ROOT=/usr/lib/llvm-$CAIDE_CLANG_VERSION
     export Clang_ROOT=/usr/lib/llvm-$CAIDE_CLANG_VERSION
-    export LLVM_DIR=/usr/lib/llvm-$CAIDE_CLANG_VERSION/lib/cmake/llvm
+    export CMAKE_PREFIX_PATH=/usr/lib/llvm-$CAIDE_CLANG_VERSION
 fi
+
+env | sort
+cmake --version
+"$CXX" --version
+"$CC" --version
+date
 
 mkdir build
 cd build
