@@ -21,8 +21,8 @@ matrix:
             key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
           - *default_packages
-          - libedit-dev
           - clang-3.8
+          - libclang-3.8-dev
           - llvm-3.8-dev
 
     - env: CAIDE_CLANG_VERSION=3.9 CAIDE_USE_SYSTEM_CLANG=ON
@@ -34,8 +34,8 @@ matrix:
             key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
           - *default_packages
-          - libedit-dev
           - clang-3.9
+          - libclang-3.9-dev
           - llvm-3.9-dev
 
     - env: CAIDE_CLANG_VERSION=4.0 CAIDE_USE_SYSTEM_CLANG=ON
@@ -47,8 +47,8 @@ matrix:
             key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
           - *default_packages
-          - libedit-dev
           - clang-4.0
+          - libclang-4.0-dev
           - llvm-4.0-dev
 
     - env: CAIDE_CLANG_VERSION=5.0 CAIDE_USE_SYSTEM_CLANG=ON
@@ -60,8 +60,8 @@ matrix:
             key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
           - *default_packages
-          - libedit-dev
           - clang-5.0
+          - libclang-5.0-dev
           - llvm-5.0-dev
 
     - env: CAIDE_CLANG_VERSION=6.0 CAIDE_USE_SYSTEM_CLANG=ON
@@ -73,8 +73,8 @@ matrix:
             key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
           - *default_packages
-          - libedit-dev
           - clang-6.0
+          - libclang-6.0-dev
           - llvm-6.0-dev
 
     - env: CAIDE_CLANG_VERSION=7 CAIDE_USE_SYSTEM_CLANG=ON
@@ -86,8 +86,8 @@ matrix:
             key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
           - *default_packages
-          - libedit-dev
           - clang-7
+          - libclang-7-dev
           - llvm-7-dev
 
     - env: CAIDE_CLANG_VERSION=8 CAIDE_USE_SYSTEM_CLANG=ON
@@ -99,8 +99,8 @@ matrix:
             key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
           - *default_packages
-          - libedit-dev
           - clang-8
+          - libclang-8-dev
           - llvm-8-dev
 
     - env: CAIDE_CLANG_VERSION=9 CAIDE_USE_SYSTEM_CLANG=ON
@@ -112,8 +112,8 @@ matrix:
             key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
           - *default_packages
-          - libedit-dev
           - clang-9
+          - libclang-9-dev
           - llvm-9-dev
 
     - env: CAIDE_CLANG_VERSION=10 CAIDE_USE_SYSTEM_CLANG=ON
@@ -125,8 +125,8 @@ matrix:
             key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
           packages:
           - *default_packages
-          - libedit-dev
           - clang-10
+          - libclang-10-dev
           - llvm-10-dev
 
   allow_failures:
