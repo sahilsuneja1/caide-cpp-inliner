@@ -11,8 +11,17 @@ then
     llvm-config-"$CAIDE_CLANG_VERSION" --cxxflags --cflags --ldflags --has-rtti
 
     cxxver="-std=c++11"
+    export Clang_ROOT=/usr/lib/llvm-$CAIDE_CLANG_VERSION
 
     case "$CAIDE_CLANG_VERSION" in
+        3.8)
+            export Clang_ROOT=
+            export LLVM_ROOT=/usr/share/llvm-3.8
+            ;;
+
+        3.9|4.0)
+            export Clang_ROOT=/usr/share/llvm-$CAIDE_CLANG_VERSION
+            ;;
         7)
             cxxver=""
             ;;
@@ -22,8 +31,7 @@ then
     esac
 
     export CXXFLAGS="$CXXFLAGS $cxxver"
-    export Clang_ROOT=/usr/lib/llvm-$CAIDE_CLANG_VERSION
-    export CMAKE_PREFIX_PATH=/usr/lib/llvm-$CAIDE_CLANG_VERSION
+    export CMAKE_PREFIX_PATH=$Clang_ROOT
 fi
 
 env | sort
