@@ -5,16 +5,6 @@
 # Commands may need to know the format version.
 set(CMAKE_IMPORT_FILE_VERSION 1)
 
-# Import target "LLVMDemangle" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDemangle APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDemangle PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMDemangle.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMDemangle )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMDemangle "${_IMPORT_PREFIX}/lib/libLLVMDemangle.a" )
-
 # Import target "LLVMSupport" for configuration "RelWithDebInfo"
 set_property(TARGET LLVMSupport APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(LLVMSupport PROPERTIES
@@ -214,16 +204,6 @@ set_target_properties(LLVMObjCARCOpts PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS LLVMObjCARCOpts )
 list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMObjCARCOpts "${_IMPORT_PREFIX}/lib/libLLVMObjCARCOpts.a" )
 
-# Import target "LLVMCoroutines" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMCoroutines APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMCoroutines PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMCoroutines.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMCoroutines )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMCoroutines "${_IMPORT_PREFIX}/lib/libLLVMCoroutines.a" )
-
 # Import target "LLVMLinker" for configuration "RelWithDebInfo"
 set_property(TARGET LLVMLinker APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(LLVMLinker PROPERTIES
@@ -314,26 +294,6 @@ set_target_properties(LLVMOption PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS LLVMOption )
 list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMOption "${_IMPORT_PREFIX}/lib/libLLVMOption.a" )
 
-# Import target "LLVMDebugInfoDWARF" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDebugInfoDWARF APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDebugInfoDWARF PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMDebugInfoDWARF.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMDebugInfoDWARF )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMDebugInfoDWARF "${_IMPORT_PREFIX}/lib/libLLVMDebugInfoDWARF.a" )
-
-# Import target "LLVMDebugInfoMSF" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMDebugInfoMSF APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMDebugInfoMSF PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMDebugInfoMSF.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMDebugInfoMSF )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMDebugInfoMSF "${_IMPORT_PREFIX}/lib/libLLVMDebugInfoMSF.a" )
-
 # Import target "LLVMDebugInfoCodeView" for configuration "RelWithDebInfo"
 set_property(TARGET LLVMDebugInfoCodeView APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(LLVMDebugInfoCodeView PROPERTIES
@@ -343,6 +303,16 @@ set_target_properties(LLVMDebugInfoCodeView PROPERTIES
 
 list(APPEND _IMPORT_CHECK_TARGETS LLVMDebugInfoCodeView )
 list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMDebugInfoCodeView "${_IMPORT_PREFIX}/lib/libLLVMDebugInfoCodeView.a" )
+
+# Import target "LLVMDebugInfoDWARF" for configuration "RelWithDebInfo"
+set_property(TARGET LLVMDebugInfoDWARF APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(LLVMDebugInfoDWARF PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMDebugInfoDWARF.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS LLVMDebugInfoDWARF )
+list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMDebugInfoDWARF "${_IMPORT_PREFIX}/lib/libLLVMDebugInfoDWARF.a" )
 
 # Import target "LLVMDebugInfoPDB" for configuration "RelWithDebInfo"
 set_property(TARGET LLVMDebugInfoPDB APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
@@ -634,16 +604,6 @@ set_target_properties(LLVMBPFCodeGen PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS LLVMBPFCodeGen )
 list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMBPFCodeGen "${_IMPORT_PREFIX}/lib/libLLVMBPFCodeGen.a" )
 
-# Import target "LLVMBPFDisassembler" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMBPFDisassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMBPFDisassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMBPFDisassembler.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMBPFDisassembler )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMBPFDisassembler "${_IMPORT_PREFIX}/lib/libLLVMBPFDisassembler.a" )
-
 # Import target "LLVMBPFAsmPrinter" for configuration "RelWithDebInfo"
 set_property(TARGET LLVMBPFAsmPrinter APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(LLVMBPFAsmPrinter PROPERTIES
@@ -723,66 +683,6 @@ set_target_properties(LLVMHexagonDisassembler PROPERTIES
 
 list(APPEND _IMPORT_CHECK_TARGETS LLVMHexagonDisassembler )
 list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMHexagonDisassembler "${_IMPORT_PREFIX}/lib/libLLVMHexagonDisassembler.a" )
-
-# Import target "LLVMLanaiCodeGen" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMLanaiCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMLanaiCodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMLanaiCodeGen.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMLanaiCodeGen )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMLanaiCodeGen "${_IMPORT_PREFIX}/lib/libLLVMLanaiCodeGen.a" )
-
-# Import target "LLVMLanaiAsmParser" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMLanaiAsmParser APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMLanaiAsmParser PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMLanaiAsmParser.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMLanaiAsmParser )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMLanaiAsmParser "${_IMPORT_PREFIX}/lib/libLLVMLanaiAsmParser.a" )
-
-# Import target "LLVMLanaiInfo" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMLanaiInfo APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMLanaiInfo PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMLanaiInfo.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMLanaiInfo )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMLanaiInfo "${_IMPORT_PREFIX}/lib/libLLVMLanaiInfo.a" )
-
-# Import target "LLVMLanaiDesc" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMLanaiDesc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMLanaiDesc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMLanaiDesc.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMLanaiDesc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMLanaiDesc "${_IMPORT_PREFIX}/lib/libLLVMLanaiDesc.a" )
-
-# Import target "LLVMLanaiInstPrinter" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMLanaiInstPrinter APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMLanaiInstPrinter PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMLanaiInstPrinter.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMLanaiInstPrinter )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMLanaiInstPrinter "${_IMPORT_PREFIX}/lib/libLLVMLanaiInstPrinter.a" )
-
-# Import target "LLVMLanaiDisassembler" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMLanaiDisassembler APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMLanaiDisassembler PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMLanaiDisassembler.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMLanaiDisassembler )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMLanaiDisassembler "${_IMPORT_PREFIX}/lib/libLLVMLanaiDisassembler.a" )
 
 # Import target "LLVMMipsCodeGen" for configuration "RelWithDebInfo"
 set_property(TARGET LLVMMipsCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
@@ -983,36 +883,6 @@ set_target_properties(LLVMPowerPCDesc PROPERTIES
 
 list(APPEND _IMPORT_CHECK_TARGETS LLVMPowerPCDesc )
 list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMPowerPCDesc "${_IMPORT_PREFIX}/lib/libLLVMPowerPCDesc.a" )
-
-# Import target "LLVMRISCVCodeGen" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMRISCVCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMRISCVCodeGen PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMRISCVCodeGen.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMRISCVCodeGen )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMRISCVCodeGen "${_IMPORT_PREFIX}/lib/libLLVMRISCVCodeGen.a" )
-
-# Import target "LLVMRISCVInfo" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMRISCVInfo APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMRISCVInfo PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMRISCVInfo.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMRISCVInfo )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMRISCVInfo "${_IMPORT_PREFIX}/lib/libLLVMRISCVInfo.a" )
-
-# Import target "LLVMRISCVDesc" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMRISCVDesc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMRISCVDesc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMRISCVDesc.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMRISCVDesc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMRISCVDesc "${_IMPORT_PREFIX}/lib/libLLVMRISCVDesc.a" )
 
 # Import target "LLVMSparcCodeGen" for configuration "RelWithDebInfo"
 set_property(TARGET LLVMSparcCodeGen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
@@ -1314,16 +1184,6 @@ set_target_properties(LLVMLibDriver PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS LLVMLibDriver )
 list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMLibDriver "${_IMPORT_PREFIX}/lib/libLLVMLibDriver.a" )
 
-# Import target "LLVMXRay" for configuration "RelWithDebInfo"
-set_property(TARGET LLVMXRay APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVMXRay PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELWITHDEBINFO "CXX"
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVMXRay.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVMXRay )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMXRay "${_IMPORT_PREFIX}/lib/libLLVMXRay.a" )
-
 # Import target "PollyISL" for configuration "RelWithDebInfo"
 set_property(TARGET PollyISL APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(PollyISL PROPERTIES
@@ -1368,7 +1228,7 @@ list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMPolly "${_IMPORT_PREFIX}/lib/LLVMPolly.s
 set_property(TARGET LTO APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(LTO PROPERTIES
   IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLTO.so"
-  IMPORTED_NO_SONAME_RELWITHDEBINFO "TRUE"
+  IMPORTED_SONAME_RELWITHDEBINFO "libLTO.so"
   )
 
 list(APPEND _IMPORT_CHECK_TARGETS LTO )
@@ -1420,24 +1280,6 @@ set_target_properties(llvm-profdata PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS llvm-profdata )
 list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-profdata "${_IMPORT_PREFIX}/bin/llvm-profdata" )
 
-# Import target "llvm-opt-report" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-opt-report APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-opt-report PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-opt-report"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-opt-report )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-opt-report "${_IMPORT_PREFIX}/bin/llvm-opt-report" )
-
-# Import target "llvm-diff" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-diff APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-diff PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-diff"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-diff )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-diff "${_IMPORT_PREFIX}/bin/llvm-diff" )
-
 # Import target "llvm-symbolizer" for configuration "RelWithDebInfo"
 set_property(TARGET llvm-symbolizer APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(llvm-symbolizer PROPERTIES
@@ -1446,79 +1288,6 @@ set_target_properties(llvm-symbolizer PROPERTIES
 
 list(APPEND _IMPORT_CHECK_TARGETS llvm-symbolizer )
 list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-symbolizer "${_IMPORT_PREFIX}/bin/llvm-symbolizer" )
-
-# Import target "bugpoint" for configuration "RelWithDebInfo"
-set_property(TARGET bugpoint APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(bugpoint PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/bugpoint"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS bugpoint )
-list(APPEND _IMPORT_CHECK_FILES_FOR_bugpoint "${_IMPORT_PREFIX}/bin/bugpoint" )
-
-# Import target "sanstats" for configuration "RelWithDebInfo"
-set_property(TARGET sanstats APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(sanstats PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/sanstats"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS sanstats )
-list(APPEND _IMPORT_CHECK_FILES_FOR_sanstats "${_IMPORT_PREFIX}/bin/sanstats" )
-
-# Import target "LLVM" for configuration "RelWithDebInfo"
-set_property(TARGET LLVM APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(LLVM PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVM-4.0.so.1"
-  IMPORTED_SONAME_RELWITHDEBINFO "libLLVM-4.0.so.1"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS LLVM )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVM "${_IMPORT_PREFIX}/lib/libLLVM-4.0.so.1" )
-
-# Import target "llvm-bcanalyzer" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-bcanalyzer APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-bcanalyzer PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-bcanalyzer"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-bcanalyzer )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-bcanalyzer "${_IMPORT_PREFIX}/bin/llvm-bcanalyzer" )
-
-# Import target "llvm-stress" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-stress APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-stress PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-stress"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-stress )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-stress "${_IMPORT_PREFIX}/bin/llvm-stress" )
-
-# Import target "llvm-rtdyld" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-rtdyld APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-rtdyld PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-rtdyld"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-rtdyld )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-rtdyld "${_IMPORT_PREFIX}/bin/llvm-rtdyld" )
-
-# Import target "llvm-c-test" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-c-test APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-c-test PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-c-test"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-c-test )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-c-test "${_IMPORT_PREFIX}/bin/llvm-c-test" )
-
-# Import target "lli" for configuration "RelWithDebInfo"
-set_property(TARGET lli APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(lli PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/lli"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS lli )
-list(APPEND _IMPORT_CHECK_FILES_FOR_lli "${_IMPORT_PREFIX}/bin/lli" )
 
 # Import target "llvm-cov" for configuration "RelWithDebInfo"
 set_property(TARGET llvm-cov APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
@@ -1529,149 +1298,14 @@ set_target_properties(llvm-cov PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS llvm-cov )
 list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-cov "${_IMPORT_PREFIX}/bin/llvm-cov" )
 
-# Import target "llvm-as" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-as APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-as PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-as"
+# Import target "lli" for configuration "RelWithDebInfo"
+set_property(TARGET lli APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(lli PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/lli"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS llvm-as )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-as "${_IMPORT_PREFIX}/bin/llvm-as" )
-
-# Import target "llvm-strings" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-strings APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-strings PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-strings"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-strings )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-strings "${_IMPORT_PREFIX}/bin/llvm-strings" )
-
-# Import target "llc" for configuration "RelWithDebInfo"
-set_property(TARGET llc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llc PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llc"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llc "${_IMPORT_PREFIX}/bin/llc" )
-
-# Import target "llvm-xray" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-xray APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-xray PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-xray"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-xray )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-xray "${_IMPORT_PREFIX}/bin/llvm-xray" )
-
-# Import target "llvm-dwp" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-dwp APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-dwp PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-dwp"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-dwp )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-dwp "${_IMPORT_PREFIX}/bin/llvm-dwp" )
-
-# Import target "llvm-cxxdump" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-cxxdump APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-cxxdump PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-cxxdump"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-cxxdump )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-cxxdump "${_IMPORT_PREFIX}/bin/llvm-cxxdump" )
-
-# Import target "llvm-dis" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-dis APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-dis PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-dis"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-dis )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-dis "${_IMPORT_PREFIX}/bin/llvm-dis" )
-
-# Import target "llvm-size" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-size APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-size PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-size"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-size )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-size "${_IMPORT_PREFIX}/bin/llvm-size" )
-
-# Import target "llvm-cxxfilt" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-cxxfilt APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-cxxfilt PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-cxxfilt"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-cxxfilt )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-cxxfilt "${_IMPORT_PREFIX}/bin/llvm-cxxfilt" )
-
-# Import target "opt" for configuration "RelWithDebInfo"
-set_property(TARGET opt APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(opt PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/opt"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS opt )
-list(APPEND _IMPORT_CHECK_FILES_FOR_opt "${_IMPORT_PREFIX}/bin/opt" )
-
-# Import target "llvm-pdbdump" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-pdbdump APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-pdbdump PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-pdbdump"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-pdbdump )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-pdbdump "${_IMPORT_PREFIX}/bin/llvm-pdbdump" )
-
-# Import target "llvm-link" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-link APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-link PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-link"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-link )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-link "${_IMPORT_PREFIX}/bin/llvm-link" )
-
-# Import target "sancov" for configuration "RelWithDebInfo"
-set_property(TARGET sancov APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(sancov PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/sancov"
-  )
-
-#list(APPEND _IMPORT_CHECK_TARGETS sancov )
-list(APPEND _IMPORT_CHECK_FILES_FOR_sancov "${_IMPORT_PREFIX}/bin/sancov" )
-
-# Import target "llvm-lto2" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-lto2 APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-lto2 PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-lto2"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-lto2 )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-lto2 "${_IMPORT_PREFIX}/bin/llvm-lto2" )
-
-# Import target "yaml2obj" for configuration "RelWithDebInfo"
-set_property(TARGET yaml2obj APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(yaml2obj PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/yaml2obj"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS yaml2obj )
-list(APPEND _IMPORT_CHECK_FILES_FOR_yaml2obj "${_IMPORT_PREFIX}/bin/yaml2obj" )
-
-# Import target "llvm-mcmarkup" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-mcmarkup APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-mcmarkup PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-mcmarkup"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS llvm-mcmarkup )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-mcmarkup "${_IMPORT_PREFIX}/bin/llvm-mcmarkup" )
+list(APPEND _IMPORT_CHECK_TARGETS lli )
+list(APPEND _IMPORT_CHECK_FILES_FOR_lli "${_IMPORT_PREFIX}/bin/lli" )
 
 # Import target "llvm-mc" for configuration "RelWithDebInfo"
 set_property(TARGET llvm-mc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
@@ -1682,51 +1316,78 @@ set_target_properties(llvm-mc PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS llvm-mc )
 list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-mc "${_IMPORT_PREFIX}/bin/llvm-mc" )
 
-# Import target "obj2yaml" for configuration "RelWithDebInfo"
-set_property(TARGET obj2yaml APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(obj2yaml PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/obj2yaml"
+# Import target "llvm-as" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-as APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-as PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-as"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS obj2yaml )
-list(APPEND _IMPORT_CHECK_FILES_FOR_obj2yaml "${_IMPORT_PREFIX}/bin/obj2yaml" )
+list(APPEND _IMPORT_CHECK_TARGETS llvm-as )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-as "${_IMPORT_PREFIX}/bin/llvm-as" )
 
-# Import target "llvm-modextract" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-modextract APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-modextract PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-modextract"
+# Import target "llvm-extract" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-extract APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-extract PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-extract"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS llvm-modextract )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-modextract "${_IMPORT_PREFIX}/bin/llvm-modextract" )
+list(APPEND _IMPORT_CHECK_TARGETS llvm-extract )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-extract "${_IMPORT_PREFIX}/bin/llvm-extract" )
 
-# Import target "llvm-split" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-split APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-split PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-split"
+# Import target "sancov" for configuration "RelWithDebInfo"
+set_property(TARGET sancov APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(sancov PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/sancov"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS llvm-split )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-split "${_IMPORT_PREFIX}/bin/llvm-split" )
+#list(APPEND _IMPORT_CHECK_TARGETS sancov )
+list(APPEND _IMPORT_CHECK_FILES_FOR_sancov "${_IMPORT_PREFIX}/bin/sancov" )
 
-# Import target "BugpointPasses" for configuration "RelWithDebInfo"
-set_property(TARGET BugpointPasses APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(BugpointPasses PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/BugpointPasses.so"
-  IMPORTED_NO_SONAME_RELWITHDEBINFO "TRUE"
+# Import target "llvm-readobj" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-readobj APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-readobj PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-readobj"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS BugpointPasses )
-list(APPEND _IMPORT_CHECK_FILES_FOR_BugpointPasses "${_IMPORT_PREFIX}/lib/BugpointPasses.so" )
+list(APPEND _IMPORT_CHECK_TARGETS llvm-readobj )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-readobj "${_IMPORT_PREFIX}/bin/llvm-readobj" )
 
-# Import target "llvm-objdump" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-objdump APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-objdump PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-objdump"
+# Import target "yaml2obj" for configuration "RelWithDebInfo"
+set_property(TARGET yaml2obj APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(yaml2obj PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/yaml2obj"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS llvm-objdump )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-objdump "${_IMPORT_PREFIX}/bin/llvm-objdump" )
+list(APPEND _IMPORT_CHECK_TARGETS yaml2obj )
+list(APPEND _IMPORT_CHECK_FILES_FOR_yaml2obj "${_IMPORT_PREFIX}/bin/yaml2obj" )
+
+# Import target "bugpoint" for configuration "RelWithDebInfo"
+set_property(TARGET bugpoint APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(bugpoint PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/bugpoint"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS bugpoint )
+list(APPEND _IMPORT_CHECK_FILES_FOR_bugpoint "${_IMPORT_PREFIX}/bin/bugpoint" )
+
+# Import target "LLVM" for configuration "RelWithDebInfo"
+set_property(TARGET LLVM APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(LLVM PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/libLLVM-3.9.so.1"
+  IMPORTED_SONAME_RELWITHDEBINFO "libLLVM-3.9.so.1"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS LLVM )
+list(APPEND _IMPORT_CHECK_FILES_FOR_LLVM "${_IMPORT_PREFIX}/lib/libLLVM-3.9.so.1" )
+
+# Import target "llc" for configuration "RelWithDebInfo"
+set_property(TARGET llc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llc PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llc"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llc )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llc "${_IMPORT_PREFIX}/bin/llc" )
 
 # Import target "verify-uselistorder" for configuration "RelWithDebInfo"
 set_property(TARGET verify-uselistorder APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
@@ -1746,23 +1407,59 @@ set_target_properties(llvm-nm PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS llvm-nm )
 list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-nm "${_IMPORT_PREFIX}/bin/llvm-nm" )
 
-# Import target "llvm-dwarfdump" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-dwarfdump APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-dwarfdump PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-dwarfdump"
+# Import target "llvm-dwp" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-dwp APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-dwp PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-dwp"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS llvm-dwarfdump )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-dwarfdump "${_IMPORT_PREFIX}/bin/llvm-dwarfdump" )
+list(APPEND _IMPORT_CHECK_TARGETS llvm-dwp )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-dwp "${_IMPORT_PREFIX}/bin/llvm-dwp" )
 
-# Import target "llvm-readobj" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-readobj APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-readobj PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-readobj"
+# Import target "llvm-dis" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-dis APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-dis PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-dis"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS llvm-readobj )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-readobj "${_IMPORT_PREFIX}/bin/llvm-readobj" )
+list(APPEND _IMPORT_CHECK_TARGETS llvm-dis )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-dis "${_IMPORT_PREFIX}/bin/llvm-dis" )
+
+# Import target "opt" for configuration "RelWithDebInfo"
+set_property(TARGET opt APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(opt PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/opt"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS opt )
+list(APPEND _IMPORT_CHECK_FILES_FOR_opt "${_IMPORT_PREFIX}/bin/opt" )
+
+# Import target "sanstats" for configuration "RelWithDebInfo"
+set_property(TARGET sanstats APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(sanstats PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/sanstats"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS sanstats )
+list(APPEND _IMPORT_CHECK_FILES_FOR_sanstats "${_IMPORT_PREFIX}/bin/sanstats" )
+
+# Import target "llvm-objdump" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-objdump APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-objdump PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-objdump"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-objdump )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-objdump "${_IMPORT_PREFIX}/bin/llvm-objdump" )
+
+# Import target "llvm-stress" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-stress APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-stress PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-stress"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-stress )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-stress "${_IMPORT_PREFIX}/bin/llvm-stress" )
 
 # Import target "llvm-dsymutil" for configuration "RelWithDebInfo"
 set_property(TARGET llvm-dsymutil APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
@@ -1773,23 +1470,123 @@ set_target_properties(llvm-dsymutil PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS llvm-dsymutil )
 list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-dsymutil "${_IMPORT_PREFIX}/bin/llvm-dsymutil" )
 
-# Import target "llvm-extract" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-extract APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-extract PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-extract"
+# Import target "llvm-split" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-split APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-split PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-split"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS llvm-extract )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-extract "${_IMPORT_PREFIX}/bin/llvm-extract" )
+list(APPEND _IMPORT_CHECK_TARGETS llvm-split )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-split "${_IMPORT_PREFIX}/bin/llvm-split" )
 
-# Import target "llvm-cat" for configuration "RelWithDebInfo"
-set_property(TARGET llvm-cat APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(llvm-cat PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-cat"
+# Import target "llvm-c-test" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-c-test APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-c-test PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-c-test"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS llvm-cat )
-list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-cat "${_IMPORT_PREFIX}/bin/llvm-cat" )
+list(APPEND _IMPORT_CHECK_TARGETS llvm-c-test )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-c-test "${_IMPORT_PREFIX}/bin/llvm-c-test" )
+
+# Import target "llvm-rtdyld" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-rtdyld APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-rtdyld PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-rtdyld"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-rtdyld )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-rtdyld "${_IMPORT_PREFIX}/bin/llvm-rtdyld" )
+
+# Import target "llvm-dwarfdump" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-dwarfdump APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-dwarfdump PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-dwarfdump"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-dwarfdump )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-dwarfdump "${_IMPORT_PREFIX}/bin/llvm-dwarfdump" )
+
+# Import target "llvm-cxxdump" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-cxxdump APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-cxxdump PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-cxxdump"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-cxxdump )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-cxxdump "${_IMPORT_PREFIX}/bin/llvm-cxxdump" )
+
+# Import target "BugpointPasses" for configuration "RelWithDebInfo"
+set_property(TARGET BugpointPasses APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(BugpointPasses PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/lib/BugpointPasses.so"
+  IMPORTED_NO_SONAME_RELWITHDEBINFO "TRUE"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS BugpointPasses )
+list(APPEND _IMPORT_CHECK_FILES_FOR_BugpointPasses "${_IMPORT_PREFIX}/lib/BugpointPasses.so" )
+
+# Import target "llvm-mcmarkup" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-mcmarkup APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-mcmarkup PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-mcmarkup"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-mcmarkup )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-mcmarkup "${_IMPORT_PREFIX}/bin/llvm-mcmarkup" )
+
+# Import target "llvm-bcanalyzer" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-bcanalyzer APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-bcanalyzer PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-bcanalyzer"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-bcanalyzer )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-bcanalyzer "${_IMPORT_PREFIX}/bin/llvm-bcanalyzer" )
+
+# Import target "llvm-pdbdump" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-pdbdump APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-pdbdump PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-pdbdump"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-pdbdump )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-pdbdump "${_IMPORT_PREFIX}/bin/llvm-pdbdump" )
+
+# Import target "llvm-size" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-size APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-size PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-size"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-size )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-size "${_IMPORT_PREFIX}/bin/llvm-size" )
+
+# Import target "llvm-link" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-link APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-link PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-link"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-link )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-link "${_IMPORT_PREFIX}/bin/llvm-link" )
+
+# Import target "obj2yaml" for configuration "RelWithDebInfo"
+set_property(TARGET obj2yaml APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(obj2yaml PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/obj2yaml"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS obj2yaml )
+list(APPEND _IMPORT_CHECK_FILES_FOR_obj2yaml "${_IMPORT_PREFIX}/bin/obj2yaml" )
+
+# Import target "llvm-diff" for configuration "RelWithDebInfo"
+set_property(TARGET llvm-diff APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
+set_target_properties(llvm-diff PROPERTIES
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/llvm-diff"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS llvm-diff )
+list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-diff "${_IMPORT_PREFIX}/bin/llvm-diff" )
 
 # Commands beyond this point should not need to know the version.
 set(CMAKE_IMPORT_FILE_VERSION)
