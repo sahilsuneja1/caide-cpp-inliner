@@ -30,6 +30,9 @@ then
 
     export CXXFLAGS="$CXXFLAGS $cxxver"
     export CMAKE_PREFIX_PATH=$Clang_ROOT
+    cmake_options=""
+else
+    cmake_options="-DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache"
 fi
 
 env | sort
@@ -41,7 +44,9 @@ date
 mkdir build
 cd build
 cmake -DCAIDE_USE_SYSTEM_CLANG=$CAIDE_USE_SYSTEM_CLANG \
-    -DCAIDE_CLANG_VERSION="$CAIDE_CLANG_VERSION" -DCMAKE_BUILD_TYPE=MinSizeRel ../src
+    $cmake_options \
+    -DCMAKE_BUILD_TYPE=MinSizeRel ../src
+
 # First build may run out of memory
 make -j3 || make -j1
 
