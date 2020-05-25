@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.12)
-if(POLICY CMP0048)
+if (POLICY CMP0048)
     cmake_policy(SET CMP0048 NEW)
 endif()
 if (POLICY CMP0074)
@@ -11,16 +11,16 @@ option(CAIDE_USE_SYSTEM_CLANG "Use system-installed clang/llvm instead of compil
 
 # https://llvm.org/docs/CMake.html#embedding-llvm-in-your-project
 
-if(CAIDE_USE_SYSTEM_CLANG)
+if (CAIDE_USE_SYSTEM_CLANG)
     find_package(Clang REQUIRED CONFIG)
     message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
     message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 else()
-    # set(LLVM_EXTERNAL_CLANG_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/llvm-project/clang" CACHE PATH "" FORCE)
+    set(LLVM_EXTERNAL_CLANG_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/llvm-project/clang" CACHE PATH "" FORCE)
     set(LLVM_ENABLE_PROJECTS clang)
     set(LLVM_TARGETS_TO_BUILD "X86" CACHE STRING "" FORCE)
     option(BUILD_SHARED_LIBS "" OFF)
-    option(LLVM_BUILD_TOOLS "" OFF)
+    option(LLVM_BUILD_TOOLS "" ON)
     option(LLVM_BUILD_EXAMPLES "" OFF)
     option(LLVM_BUILD_TESTS "" OFF)
     option(LLVM_BUILD_DOCS "" OFF)
@@ -42,34 +42,36 @@ else()
     option(LLVM_INCLUDE_GOTESTS "" OFF)
     option(LLVM_INCLUDE_RUNTIMES "" OFF)
     option(LLVM_INCLUDE_TESTS "" OFF)
-    option(LLVM_INCLUDE_TOOLS "" OFF)
+    option(LLVM_INCLUDE_TOOLS "" ON)
     option(LLVM_INCLUDE_UTILS "" OFF)
     option(WITH_POLLY "" OFF)
     set(HAVE_LIBEDIT false CACHE BOOL "" FORCE)
 
     add_subdirectory(llvm-project/llvm EXCLUDE_FROM_ALL)
 
-    if(POLICY CMP0024)
-        cmake_policy(SET CMP0024 OLD)
+    if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/lib/cmake/clang/ClangConfig.cmake")
+        if (POLICY CMP0024)
+            cmake_policy(SET CMP0024 OLD)
+        endif()
+        include("${CMAKE_CURRENT_BINARY_DIR}/lib/cmake/clang/ClangConfig.cmake")
+    else()
+        # If the above doesn't work, we hardcode certain variables:
+        set(LLVM_PACKAGE_VERSION "10.0.0")
+        set(LLVM_LIBRARY_DIRS "${CMAKE_CURRENT_BINARY_DIR}/llvm-project/llvm/lib")
+        set(LLVM_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/llvm-project/llvm/include"
+          "${CMAKE_CURRENT_BINARY_DIR}/llvm-project/llvm/include")
+        set(CLANG_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/llvm-project/clang/include"
+            "${CMAKE_CURRENT_BINARY_DIR}/llvm-project/llvm/tools/clang/include")
+        set(LLVM_DEFINITIONS "")
     endif()
-    include("${CMAKE_BINARY_DIR}/lib/cmake/clang/ClangConfig.cmake")
-
-    # If the above doesn't work anymore, we'll probably need to hardcode certain variables:
-    # set(LLVM_PACKAGE_VERSION "xx.x.x")
-    # set(LLVM_LIBRARY_DIRS "${CMAKE_CURRENT_BINARY_DIR}/llvm-project/llvm/lib")
-    # set(LLVM_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/llvm-project/llvm/include"
-    #   "${CMAKE_CURRENT_BINARY_DIR}/llvm-project/llvm/include")
-    # set(CLANG_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/llvm-project/clang/include"
-    #     "${CMAKE_CURRENT_BINARY_DIR}/llvm-project/llvm/tools/clang/include")
-    # set(LLVM_DEFINITIONS "")
 
     message(STATUS "Using LLVM from submodule ${LLVM_PACKAGE_VERSION}")
 endif()
 
-if(LLVM_PACKAGE_VERSION VERSION_LESS "3.8")
+if (LLVM_PACKAGE_VERSION VERSION_LESS "3.8")
     message(WARNING "A version of clang/llvm that is too old is detected. Build failure is possible.")
 endif()
-if(LLVM_PACKAGE_VERSION VERSION_GREATER "10.0.255")
+if (LLVM_PACKAGE_VERSION VERSION_GREATER "10.0.255")
     message(WARNING "A version of clang/llvm that is too recent is detected. Build failure is possible.")
 endif()
 
@@ -96,22 +98,19 @@ include(CheckCXXCompilerFlag)
 
 function(add_compiler_option_if_supported opt)
     CHECK_CXX_COMPILER_FLAG("${opt}" compiler_supports_option)
-    if(compiler_supports_option)
+    if (compiler_supports_option)
         add_compile_options("${opt}")
     endif()
 endfunction(add_compiler_option_if_supported)
 
 # CXX_STANDARD() is available only in cmake >= 3
 # Set c++11 flag explicitly
-# add_compiler_option_if_supported("-std=c++14")
+add_compiler_option_if_supported("-std=c++11")
 
-if(MSVC)
+if (MSVC)
     # Use the highest warning level for Visual Studio.
     add_compile_options("/W4")
-endif()
-
-if(CMAKE_COMPILER_IS_GNUCXX)
-    # Add warnings for g++
+else()
     foreach(flag -Wall -Wextra -Wshadow -Wlogical-op -Werror=return-type)
         add_compiler_option_if_supported("${flag}")
     endforeach()

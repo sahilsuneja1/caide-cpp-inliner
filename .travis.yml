@@ -126,7 +126,7 @@ matrix:
 
   allow_failures:
   - env: CAIDE_USE_SYSTEM_CLANG=OFF
-  - env: CAIDE_CLANG_VERSION=4.0 CAIDE_USE_SYSTEM_CLANG=ON
+  # - env: CAIDE_CLANG_VERSION=4.0 CAIDE_USE_SYSTEM_CLANG=ON
 
   fast_finish: false
 
