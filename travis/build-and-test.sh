@@ -5,6 +5,8 @@ export CXX=g++-9
 export CC=gcc-9
 # export CXXFLAGS=-std=c++14
 
+date
+
 if [ "$CAIDE_USE_SYSTEM_CLANG" = "ON" ]
 then
     # Debug
@@ -32,6 +34,7 @@ then
     export CMAKE_PREFIX_PATH=$Clang_ROOT
     cmake_options=""
 else
+    git submodule update --init --depth 1
     cmake_options="-DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache"
 fi
 
@@ -53,8 +56,11 @@ make -j3 || make -j1
 date
 
 # One of the tests requires clang/lib/Headers include directory
-git submodule update --init --depth 1
-date
+if [ "$CAIDE_USE_SYSTEM_CLANG" = "ON" ]
+then
+    git submodule update --init --depth 1
+    date
+fi
 
 ctest --verbose
 

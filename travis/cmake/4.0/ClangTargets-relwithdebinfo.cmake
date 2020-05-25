@@ -248,29 +248,11 @@ list(APPEND _IMPORT_CHECK_FILES_FOR_clangFormat "${_IMPORT_PREFIX}/lib/libclangF
 # Import target "clang" for configuration "RelWithDebInfo"
 set_property(TARGET clang APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(clang PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/clang-4.0"
+  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/clang"
   )
 
 list(APPEND _IMPORT_CHECK_TARGETS clang )
-list(APPEND _IMPORT_CHECK_FILES_FOR_clang "${_IMPORT_PREFIX}/bin/clang-4.0" )
-
-# Import target "clang-format" for configuration "RelWithDebInfo"
-set_property(TARGET clang-format APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(clang-format PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/clang-format"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS clang-format )
-list(APPEND _IMPORT_CHECK_FILES_FOR_clang-format "${_IMPORT_PREFIX}/bin/clang-format" )
-
-# Import target "clang-import-test" for configuration "RelWithDebInfo"
-set_property(TARGET clang-import-test APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(clang-import-test PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/clang-import-test"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS clang-import-test )
-list(APPEND _IMPORT_CHECK_FILES_FOR_clang-import-test "${_IMPORT_PREFIX}/bin/clang-import-test" )
+list(APPEND _IMPORT_CHECK_FILES_FOR_clang "${_IMPORT_PREFIX}/bin/clang" )
 
 # Import target "clangApplyReplacements" for configuration "RelWithDebInfo"
 set_property(TARGET clangApplyReplacements APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
