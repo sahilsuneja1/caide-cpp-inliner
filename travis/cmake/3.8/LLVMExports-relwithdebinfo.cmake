@@ -1401,14 +1401,6 @@ set_target_properties(llvm-dwarfdump PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS llvm-dwarfdump )
 list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-dwarfdump "${_IMPORT_PREFIX}/bin/llvm-dwarfdump" )
 
-# Import target "sancov" for configuration "RelWithDebInfo"
-set_property(TARGET sancov APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(sancov PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/sancov"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS sancov )
-list(APPEND _IMPORT_CHECK_FILES_FOR_sancov "${_IMPORT_PREFIX}/bin/sancov" )
 
 # Import target "llvm-dwp" for configuration "RelWithDebInfo"
 set_property(TARGET llvm-dwp APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
@@ -1436,15 +1428,6 @@ set_target_properties(llvm-readobj PROPERTIES
 
 list(APPEND _IMPORT_CHECK_TARGETS llvm-readobj )
 list(APPEND _IMPORT_CHECK_FILES_FOR_llvm-readobj "${_IMPORT_PREFIX}/bin/llvm-readobj" )
-
-# Import target "lli" for configuration "RelWithDebInfo"
-set_property(TARGET lli APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
-set_target_properties(lli PROPERTIES
-  IMPORTED_LOCATION_RELWITHDEBINFO "${_IMPORT_PREFIX}/bin/lli"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS lli )
-list(APPEND _IMPORT_CHECK_FILES_FOR_lli "${_IMPORT_PREFIX}/bin/lli" )
 
 # Import target "llvm-split" for configuration "RelWithDebInfo"
 set_property(TARGET llvm-split APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
