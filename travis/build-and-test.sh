@@ -3,7 +3,6 @@ set -ev
 
 export CXX=g++-9
 export CC=gcc-9
-# export CXXFLAGS=-std=c++14
 
 date
 
@@ -12,7 +11,6 @@ then
     # Debug
     llvm-config-"$CAIDE_CLANG_VERSION" --cxxflags --cflags --ldflags --has-rtti
 
-    cxxver="-std=c++11"
     export Clang_ROOT=/usr/lib/llvm-$CAIDE_CLANG_VERSION
 
     case "$CAIDE_CLANG_VERSION" in
@@ -21,16 +19,8 @@ then
             export Clang_ROOT="$TRAVIS_BUILD_DIR/travis/cmake/$CAIDE_CLANG_VERSION"
             export LLVM_ROOT="$Clang_ROOT"
             ;;
-
-        7)
-            cxxver=""
-            ;;
-        10)
-            cxxver="-std=c++14"
-            ;;
     esac
 
-    export CXXFLAGS="$CXXFLAGS $cxxver"
     export CMAKE_PREFIX_PATH=$Clang_ROOT
     cmake_options=""
 else

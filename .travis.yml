@@ -124,8 +124,8 @@ matrix:
           - libclang-10-dev
           - llvm-10-dev
 
-  allow_failures:
-  - env: CAIDE_USE_SYSTEM_CLANG=OFF
+  # allow_failures:
+  # - env: CAIDE_USE_SYSTEM_CLANG=OFF
   # - env: CAIDE_CLANG_VERSION=4.0 CAIDE_USE_SYSTEM_CLANG=ON
 
   fast_finish: false
