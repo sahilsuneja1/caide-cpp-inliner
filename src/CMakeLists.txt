@@ -110,15 +110,13 @@ else()
 endif()
 
 
-# add_definitions(${LLVM_DEFINITIONS})
-
 add_library(caideInliner STATIC
     caideInliner.cpp clang_compat.cpp DependenciesCollector.cpp inliner.cpp MergeNamespacesVisitor.cpp
     optimizer.cpp OptimizerVisitor.cpp RemoveInactivePreprocessorBlocks.cpp SmartRewriter.cpp
     SourceInfo.cpp SourceLocationComparers.cpp util.cpp)
 
 target_include_directories(caideInliner SYSTEM PRIVATE ${CLANG_INCLUDE_DIRS} ${LLVM_INCLUDE_DIRS})
-target_compile_definitions(caideInliner PUBLIC ${CLANG_DEFINITIONS} ${LLVM_DEFINITIONS})
+target_compile_definitions(caideInliner PRIVATE ${CLANG_DEFINITIONS} ${LLVM_DEFINITIONS})
 target_link_libraries(caideInliner PRIVATE
     clangAST clangBasic clangFrontend clangLex clangRewrite clangSema clangTooling)
 
@@ -132,7 +130,7 @@ add_subdirectory(test-tool)
 # The result is in topological order.
 # This is only needed for linking in external build tools.
 function(get_dependencies_recursively_impl target output_var entered_var)
-    if(NOT ${target} MATCHES "^(caide|clang|LLVM).*" OR NOT TARGET ${target})
+    if(NOT TARGET ${target} OR NOT ${target} MATCHES "^(caide|clang|LLVM).*")
         return()
     endif()
 
@@ -143,8 +141,8 @@ function(get_dependencies_recursively_impl target output_var entered_var)
 
     list(APPEND ${entered_var} ${target})
 
-    get_target_property(IMPORTED ${target} IMPORTED)
-    if(IMPORTED)
+    get_target_property(imported ${target} IMPORTED)
+    if(imported)
         get_target_property(dependencies ${target} INTERFACE_LINK_LIBRARIES)
     else()
         get_target_property(dependencies ${target} LINK_LIBRARIES)
